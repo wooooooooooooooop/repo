@@ -230,10 +230,6 @@ int main() {
     char username[20], password[20];
     int option;
 
-    printf("-------------------------------\n");
-    printf("-------------------------------\n");
-    printf("-------------------------------\n\n\n");
-
     printf("Please login before proceeding: \n");
     printf("\n\n[1] Register\n[2] Login\n");
     scanf("%d", &option);
