@@ -1,8 +1,3 @@
-/* 
-                                                    add item saving 
-*/
-
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -13,6 +8,66 @@ struct login {
     char username[20];
     char password[20];
 };
+
+typedef struct
+{
+    int id;
+    char name[50];
+    int number;
+    double price;
+} item;
+
+//add,remove,print
+
+void additem(){
+    FILE *file = fopen("items.txt","a");
+    item newItem;
+
+    printf("Enter new item name: \n");
+    scanf("%s",newItem.name);
+    printf("Enter item ID: \n");
+    scanf("%s",&newItem.number);
+    printf("Enter item price: \n");
+    scanf("%s",&newItem.price);
+
+
+    fprintf(file, "%d %s %d %.2f\n", newItem.id, newItem.name,newItem.number,newItem.price);
+    fclose(file);
+    
+}
+
+void removeitem(){
+    FILE *file = fopen("items.txt", "r");
+    FILE *tempFile = fopen("temp.txt", "w");
+    item itemcur;
+    int idToRemove;
+
+    printf("Enter item ID: \n");
+    scanf("%d", &idToRemove);
+
+    while (fscanf(file, "%d %s %d %f\n", &itemcur.id, itemcur.name, &itemcur.number, &itemcur.price) != EOF) {
+        if (itemcur.id != idToRemove) {
+            fprintf(tempFile, "%d %s %d %.2f\n", itemcur.id, itemcur.name, itemcur.number, itemcur.price);
+        }
+    }
+
+    fclose(file);
+    fclose(tempFile);
+    remove("items.txt");                    /*quickfix*/
+    rename("temp.txt","items.txt");
+
+}
+
+void viewitem(){
+    FILE *file = fopen("items.txt","r");
+    item itemcur;
+
+   while (fscanf(file, "%d %s %d %f\n", &itemcur.id, itemcur.name, &itemcur.number, &itemcur.price) != EOF) {
+        printf("ID: %d\nName: %s\nNumber: %d\nPrice: %.2f\n\n", itemcur.id, itemcur.name, itemcur.number, itemcur.price);
+    }
+
+    fclose(file); 
+}
 
 void registerUser(void) {
     struct login l;
@@ -90,6 +145,7 @@ int main() {
         login();
     }
 
+
     while(true){
 
         printf("\n\n[1]Add Item\n[2]Remove Item\n[3]View Items\n[4]Exit\n");
@@ -98,13 +154,13 @@ int main() {
         switch (option)
         {
         case 1:
-            /* code */
+            additem();
             break;
         case 2:
-            /* code */
+            removeitem();
             break;
         case 3:
-            /* code */
+            viewitem();
             break;
         case 4:
             return 0;
